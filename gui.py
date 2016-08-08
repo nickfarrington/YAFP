@@ -31,6 +31,8 @@ class FeedGUI(QMainWindow):
             self.currentFeed = self.feeds[feed]
         except KeyError:
             self.currentFeed = parse(self.urls[feed])
+            url = self.urls[feed]
+            self.currentFeed = parse(url)
         self.updateLabels()
 
 
@@ -103,7 +105,7 @@ class FeedGUI(QMainWindow):
                                              "Enter a nickname for this feed")
 
         if ok:
-            addFeed(url,nick)
+            url = addFeed(url,nick)
             feed = parse(url)
             self.feeds[nick] = feed
             self.combo.addItem(nick)

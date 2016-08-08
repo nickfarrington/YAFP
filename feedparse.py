@@ -73,8 +73,11 @@ def addFeed(url = None, name = None):
     if url == None or name == None:
         url = input("Please enter the URL of a new feed: ")
         name = input("Enter a nickname for this feed: ")
+    if not (url.startswith("https://") or url.startswith("http://")):
+        url = "".join(["http://",url])
     f.write(name + ";" + url + "\n")
     f.close()
+    return url
 
 def removeFeed(name):
     """Removes a feed from feeds.txt"""
