@@ -7,6 +7,9 @@ if sys.version[0] == "2":
 def getInputFile():
     if os.name == "posix":
         path = os.path.expanduser("~") + "/.config/YAFP"
+        
+    if os.name == "darwin":
+        path = os.path.expanduser("~") + "/Library/Application Support/YAFP"
 
     if os.name == "nt":
         path = os.path.join(os.path.expanduser("~"), "Documents", "YAFP")
