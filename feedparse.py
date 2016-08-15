@@ -115,7 +115,7 @@ def browse():
         
 def helpDownloadPodcast():
     url = input("Enter the URL of a podcast: ")
-    limit = int(input("How many podcasts to download?: ")
+    limit = int(input("How many podcasts to download?: "))
     feed = feedparser.parse(url)
     downloadMedia(feed,limit)
 
