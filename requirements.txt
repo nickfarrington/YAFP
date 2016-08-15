@@ -1,2 +1,3 @@
 feedparse
 PyQt5
+requests
