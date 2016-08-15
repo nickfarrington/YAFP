@@ -1,4 +1,4 @@
-import feedparser,sys,urllib,os
+import feedparser,sys,requests,os
 feedparser.PREFERRED_XML_PARSERS.remove("drv_libxml2")
 
 if sys.version[0] == "2":
@@ -42,14 +42,23 @@ def downloadMedia(podcast,limit=10):
             key = i
             break
 
+    if key == None:
+        print("ERROR: Could not find audio link from RSS feed")
+        return
+    
     for i in range(len(podcast['entries'])):
-        if i == limit:
+        if i >= limit:
             break
         episode = podcast['entries'][i]
         url = episode['links'][key]['href']
-        print(url)
-        print("Downloading podcast {} of {}".format(i + 1,limit))
-        urllib.urlretrieve(episode['links'][key]['href'],episode['title']+".mp3")
+        print("Downloading podcast {} of {}:".format(i + 1,limit),episode['title'])
+        f = requests.get(episode['links'][key]['href'])
+        if f.status_code == 200:
+            with open(episode['title'] + '.mp3', "wb") as output:
+                output.write(f.content)
+        else:
+            print("ERROR {}".format(f.status_code))
+            return
         print("Download complete.")
 
 def displayTitles(feed, limit = 10):
@@ -106,8 +115,9 @@ def browse():
         
 def helpDownloadPodcast():
     url = input("Enter the URL of a podcast: ")
+    limit = int(input("How many podcasts to download?: ")
     feed = feedparser.parse(url)
-    downloadMedia(feed)
+    downloadMedia(feed,limit)
 
 def displayHelp():
     print("browse: Browse your feeds\nreddit: Open a subreddit\nadd: Add a new feed\nmedia: Load audio files from a podcast RSS")
